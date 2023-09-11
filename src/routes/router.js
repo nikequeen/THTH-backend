@@ -4,7 +4,7 @@ const authenticationController = require("../controller/auth");
 module.exports = (app) => {
   const applicationRoute = express.Router();
 
-  applicationRoute.use("authentification", authenticationController);
+  applicationRoute.use("/authentification", authenticationController);
 
   return applicationRoute;
 };

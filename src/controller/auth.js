@@ -8,7 +8,7 @@ router.post("/inscription", async (req, res) => {
 
   try {
     console.log(req.body);
-    const newuser = await models.User.createText({ nom, email, motdepasse });
+    const newuser = await models.User.create({ nom, email, motdepasse });
     res.sendstatus(201).json(newuser);
   } catch (err) {
     res.sendStatus(404).json("Imposible de créer l'utilisateur");
