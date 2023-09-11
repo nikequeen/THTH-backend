@@ -22,4 +22,5 @@ app.use(express.json());
 app.use(express.static("uploads"));
 
 router(app);
+
 module.exports = app;
