@@ -3,6 +3,4 @@ const getUserData = () => {
     console.log("From Service User")
 };
   
-module.exports = {
-    getUserData,
-};
+  

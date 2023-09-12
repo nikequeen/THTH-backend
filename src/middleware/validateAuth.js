@@ -1,5 +1,5 @@
-const authSchema = require("../createUser");
-const validateauth = async (req, res, next) => {
+const authSchema = require("../dto/createUser");
+const validateAuth = async (req, res, next) => {
   try {
     await authSchema.validate({
       body: req.body,
@@ -11,4 +11,4 @@ const validateauth = async (req, res, next) => {
     throw res.status(401);
   }
 };
-module.exports = validateauth;
+module.exports = validateAuth;
