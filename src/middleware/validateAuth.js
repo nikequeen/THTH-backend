@@ -1,4 +1,4 @@
-const authSchema = require("../dto/createUserschema");
+const authSchema = require("../dto/createUser");
 const validateauth = async (req, res, next) => {
   try {
     await authSchema.validate({

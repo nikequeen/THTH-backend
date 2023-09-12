@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors'); 
 
 const app = express();
-const appRoutes = require('./src/routers/router');
+const router = require('./src/routers/router');
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use('/api', appRoutes); 
+app.use('/api', router); 
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
