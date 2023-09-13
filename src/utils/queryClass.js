@@ -90,4 +90,4 @@ class queryClass {
     }
   }
 }
-export default queryClass;
+module.exports = queryClass;

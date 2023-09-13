@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "audace",
+    "password": "p@ssw0rd3",
+    "database": "backendTHTH",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "audace",
+    "password": "p@ssw0rd3",
+    "database": "database_test",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "audace",
+    "password": "p@ssw0rd3",
+    "database": "database_production",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}
