@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "audace",
-    "password": "p@ssw0rd3",
+    "username": "queen",
+    "password": "4dgp54;)Ie9x",
     "database": "backendTHTH",
-    "host": "localhost",
+    "host": "data.geminico.cloud",
     "dialect": "mysql"
   },
   "test": {
-    "username": "audace",
-    "password": "p@ssw0rd3",
+    "username": "queen",
+    "password": "4dgp54;)Ie9x",
     "database": "database_test",
-    "host": "localhost",
+    "host": "data.geminico.cloud",
     "dialect": "mysql"
   },
   "production": {
-    "username": "audace",
-    "password": "p@ssw0rd3",
+    "username": "queen",
+    "password": "4dgp54;)Ie9x",
     "database": "database_production",
-    "host": "localhost",
+    "host": "data.geminico.cloud",
     "dialect": "mysql"
   }
 }
