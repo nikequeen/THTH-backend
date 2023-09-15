@@ -1,11 +1,6 @@
-const modelutilisateur = require("../../models/utilisateur");
 const queryClass = require("../../utils/queryClass");
-const queryInstance = new queryClass(modelutilisateur);
+class UtilisateurService extends queryClass {
 
-class Utilisateur {
-  constructor() {
-    this.model = queryInstance;
-  }
 }
 
-module.exports = Utilisateur;
+module.exports = UtilisateurService;

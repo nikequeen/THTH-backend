@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const app = express();
 const router = require('./src/routers/router');
+const { sequelize } = require("./src/models");
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
@@ -17,5 +18,11 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Authorization");
   next();
 });
+
+// start database
+const startDb = async () => {
+  await sequelize.authenticate();
+};
+startDb();
 
 module.exports = app; 

@@ -1,4 +1,5 @@
 const Utilisateur = require("./userService");
+
 class Admin extends Utilisateur {
 
     async createCompteAgent(donneInscription) {

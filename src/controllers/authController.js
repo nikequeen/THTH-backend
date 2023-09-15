@@ -12,16 +12,13 @@ router.post(
 
     try {
       console.log(req.body);
-      const result = await new Client().createUtilisateur(req.body);
-      if (result) {
-        res.status(201).json({ message: "Inscription réussie", result });
+      const result = await Client.createUtilisateur(req.body);
+      if (!result.error) {
+        res.status(201).json(result);
       } else {
-        res
-          .status(400)
-          .json({ message: "Échec de l'inscription", error: result.message });
+        res.status(400).json(result);
       }
       console.log(result);
-      res.status(200).json("utilisateur créer avec succes");
     } catch (error) {
       console.error("une erreur c'est produit lors de l'inscription", error);
       res.status(500).json("une erreur c'est produit lors de l'inscription");

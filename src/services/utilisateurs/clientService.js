@@ -1,25 +1,25 @@
-const Utilisateur = require("./userService");
+const UtilisateurService = require("./userService");
+const {Utilisateur} = require("../../models");
 
-class Client extends Utilisateur {
+class Client extends UtilisateurService {
+
   async createUtilisateur(donneInscription) {
     const email = donneInscription.email;
     try {
-      const existingUtilisateur = await this.model.findOne({
-        attributes: ["email"],
-        where: { email: email },
-      });
+      const existingUtilisateur = await this.findOne({email:email});
       console.log(existingUtilisateur);
+
       if (existingUtilisateur) {
-        return { success: false, message: "Cet e-mail est déjà utilisé." };
+        return { error: true, message: "Cet e-mail est déjà utilisé." };
       }
-      const newUser = await this.model.create(donneInscription);
+      const newUser = await this.create(donneInscription);
       console.log("Created new record:", newUser);
-      return { success: true, user: newUser };
+      return { error: false, user: newUser };
     } catch (error) {
       console.error("Error creating user:", error);
-      return { success: true, error: error };
+      return { error: true, error: error };
     }
   }
 } 
 
-module.exports = Client;
+module.exports = new Client(Utilisateur);

@@ -17,21 +17,19 @@ module.exports = (sequelize, DataTypes) => {
       nom: DataTypes.STRING,
       email: DataTypes.STRING,
       motdepasse: DataTypes.STRING,
-      status: DataTypes.ENUM,
-      type: DataTypes.ENUM,
+      status: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Utilisateur",
     }
   );
-  Utilisateur.beforeCreate(async (Utilisateur) => {
-    try {
-      const hashedPassword = await bcrypt.hash(Utilisateur.motdepasse, 10);
-      Utilisateur.motdepasse = hashedPassword;
-    } catch (error) {
-      console.error("Erreur lors de la création de l'utilisateur :", error);
-      throw error;
+  Utilisateur.beforeCreate(async (utilisateur) => {
+
+    if (utilisateur.motdepasse) {
+      const hashPassword = await bcrypt.hash(utilisateur.motdepasse, 10);
+      utilisateur.motdepasse = hashPassword;
     }
   });
   return Utilisateur;
