@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const Client = require("../services/utilisateurs/clientService")
+const Admin = require("../services/utilisateurs/adminService")
 const yupValidator = require("../middleware/validate");
 const { inscriptionDto } = require("../dto/authDto");
 // const { connexionDto } = require("../dto/authDto");
 
 router.post(
-  "/inscription",
+  "/agentinscription",
   yupValidator(inscriptionDto),
   async function (req, res) {
     try {
       console.log(req.body);
-      const result = await Client.createClient(req.body);
+      const result = await Admin.createAgent(req.body);
       if (!result.error) {
         res.status(201).json(result);
       } else {
@@ -24,21 +24,4 @@ router.post(
     }
   }
 );
-// router.post("/connexion", yupValidator(connexionDto), async function (req, res) {
-//   try{
-//   console.log(req.body);
-//   const user = await Client.getUtilisateur(req.body);
-//   if (!user.error) {
-//     res.status(201).json(user);
-//   } else {
-//     res.status(400).json(user);
-//   }
-// console.log(user);
-//   } catch (error){
-//     console.error("une erreur c'est produit lors de la connxion", error);
-//     res.status(500).json("une erreur c'est produit lors de la connexion")
-//   }
-  
-// });
-
 module.exports = router;

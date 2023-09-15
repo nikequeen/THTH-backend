@@ -1,18 +1,13 @@
-const Utilisateur = require("./userService");
+const UtilisateurService = require("./userService");
+const { utilisateur } = require("../../models/utilisateur");
+const Enumtype = require("../utilisateurs/enumtype")
 
-class Admin extends Utilisateur {
-
-    async createCompteAgent(donneInscription) {
-        email = donneInscription.email;
-        try {
-          const newUser = await  this.model.create(donneInscription);
-          console.log("Created new record:", newUser);
-          return { success: true, user: newUser };
-        } catch (error) {
-          console.error("Error creating user:", error);
-          return { success: true, error: error };
-    
-        }
-    }
+class Admin extends UtilisateurService {
+  async createAgent(reqBody) {
+    console.log(reqBody);
+    reqBody.type = Enumtype.Agent;
+    const createAgent = await this.createUnCompte(reqBody);
+    return createAgent;
+  }
 }
-module.exports = Admin;
+module.exports = new Admin(utilisateur);
