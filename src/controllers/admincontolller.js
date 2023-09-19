@@ -6,7 +6,7 @@ const { inscriptionDto } = require("../dto/authDto");
 // const { connexionDto } = require("../dto/authDto");
 
 router.post(
-  "/agentinscription",
+  "/inscription-agent",
   yupValidator(inscriptionDto),
   async function (req, res) {
     try {

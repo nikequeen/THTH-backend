@@ -9,5 +9,11 @@ class Client extends UtilisateurService {
     const createClient = await this.createUnCompte(reqBody);
     return createClient;
   }
+async getClient(reqBody){
+  console.log(reqBody)
+  const getClient = await this.getUnCompte(reqBody)
+  return getClient
+}
+
 }
 module.exports = new Client(Utilisateur);
