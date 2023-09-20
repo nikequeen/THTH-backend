@@ -39,42 +39,34 @@ class UtilisateurService extends queryClass {
   }
   async getUnCompte(donneConnexion) {
     const email = donneConnexion.email;
+  
     try {
       const existingUtilisateur = await this.findOne({
         email: email,
       });
-      console.log(existingUtilisateur.motdepasse);
-      console.log(
-        this.verifierMotdepasse(
-          donneConnexion.motdepasse,
-          existingUtilisateur.motdepasse
-        )
-      );
-
+  
       if (existingUtilisateur) {
         const isValidPassword = this.verifierMotdepasse(
           donneConnexion.motdepasse,
           existingUtilisateur.motdepasse
         );
-        console.log(
-          this.genererJwt(existingUtilisateur, "process.env.ACCES_TOKEN_SECRET")
-        );
-        const gToken = this.genererJwt(
-          existingUtilisateur,
-          "process.env.ACCES_TOKEN_SECRET"
-        );
-        if (gToken) {
-          return {
-            error: false,
-            message: "utilisateur connecté",
-            token: gToken,
-            user: existingUtilisateur,
-          };
-        } else {
-          return { error: true, message: "token non générer" };
-        }
+  
         if (isValidPassword) {
-          return { error: false, user: existingUtilisateur };
+          const gToken = this.genererJwt(
+            existingUtilisateur,
+            "process.env.ACCES_TOKEN_SECRET "
+          );
+  
+          if (gToken) {
+            return {
+              error: false,
+              message: "utilisateur connecté",
+              token: gToken,
+              user: existingUtilisateur,
+            };
+          } else {
+            return { error: true, message: "token non généré" };
+          }
         } else {
           return { error: true, message: "Mot de passe incorrect." };
         }
@@ -90,6 +82,7 @@ class UtilisateurService extends queryClass {
       };
     }
   }
+  
 }
 
 module.exports = UtilisateurService;
