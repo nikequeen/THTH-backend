@@ -11,10 +11,12 @@ class UtilisateurService extends queryClass {
       { expiresIn: "48h" }
     );
   }
-
-  // decoderJwt(){
-  //   return
-  // }
+  decoderJwt(utilisateur) {
+    return jsonwebtoken.verify(
+      { utilisateur },
+      "process.env.ACCES_TOKEN_SECRET "
+    );
+  }
 
   verifierMotdepasse(motdepasse, hashedmotdepasse) {
     return bcrypt.compare(motdepasse, hashedmotdepasse);
@@ -39,24 +41,24 @@ class UtilisateurService extends queryClass {
   }
   async getUnCompte(donneConnexion) {
     const email = donneConnexion.email;
-  
+
     try {
       const existingUtilisateur = await this.findOne({
         email: email,
       });
-  
+
       if (existingUtilisateur) {
         const isValidPassword = this.verifierMotdepasse(
           donneConnexion.motdepasse,
           existingUtilisateur.motdepasse
         );
-  
+
         if (isValidPassword) {
           const gToken = this.genererJwt(
             existingUtilisateur,
             "process.env.ACCES_TOKEN_SECRET "
           );
-  
+
           if (gToken) {
             return {
               error: false,
@@ -82,7 +84,6 @@ class UtilisateurService extends queryClass {
       };
     }
   }
-  
 }
 
 module.exports = UtilisateurService;

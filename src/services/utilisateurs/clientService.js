@@ -16,4 +16,4 @@ async getClient(reqBody){
 }
 
 }
-module.exports = new Client(Utilisateur);
+module.exports = new Client;
