@@ -1,34 +1,46 @@
 const UtilisateurService = require("../services/utilisateurs/userService");
-const { Utilisateur } = require("../models/utilisateur");
-const Authmiddleware = (req, res, next) => {
+const { Utilisateur } = require("../models");
+
+const userService =  new UtilisateurService(Utilisateur);
+
+exports.Authmiddleware = async (req, res, next) => {
   let authHeader = req.headers.authorization;
-  console.log(authHeader);
+
   if (authHeader == null) {
     return res.status(401).json({ error: true, message: "entête introuvable" });
   }
-  if (authHeader.charAt(0) == '"' && authHeader.charAt(authHeader.length - 1)) {
+  if (authHeader.charAt(0) === '"' || authHeader.charAt(authHeader.length - 1) === '"') {
     authHeader = authHeader.replaceAll('"', '').trim();
-  console.log(authHeader);
-
   }
+
   const token = authHeader.split(" ")[1];
-  console.log(token);
+  // console.log(token);
 
-  const User = new UtilisateurService(Utilisateur).decoderJwt(token);
-  console.log(User.id);
+  let user = userService.decoderJwt(token);
+  user = user.utilisateur
 
-  const trouveUtilisateur = new UtilisateurService(Utilisateur).findOne({
-    id: User.id,
-  });
-  console.log(trouveUtilisateur);
+  const trouveUtilisateur = await userService.findUserById(user.id);
 
   if (trouveUtilisateur == null) {
-    return res
-      .status(401)
-      .json({ error: true, message: "utilisateur introuvable" });
+    return res.status(401).json({ error: true, message: "utilisateur introuvable" });
   }
-  req.user = trouveUtilisateur;
 
-  next();
+  req.auth = trouveUtilisateur;
+
+  return next();
 };
-module.exports = Authmiddleware;
+
+exports.typeCompteAuthorisation = (types) => (req, res , next) => {
+  
+  const {auth} = req
+  
+  if(!types.includes(auth.type)){
+    return res.status(401).json({
+      error:true, message: 'Vous n\'est pas authorisé à avoir access '
+    })
+  }
+
+  return next()
+}
+
+// module.exports = Authmiddleware;

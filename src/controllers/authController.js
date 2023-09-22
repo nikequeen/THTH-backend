@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Client = require("../services/utilisateurs/clientService");
 const yupValidator = require("../middleware/validate");
-const Authmiddleware = require("../middleware/Authmiddleware");
+const {Authmiddleware,typeCompteAuthorisation} = require("../middleware/Authmiddleware");
 const { inscriptionDto } = require("../dto/authDto");
 const { connexionDto } = require("../dto/authDto");
+const Enumtype = require("../services/utilisateurs/enumtype");
 
 router.post(
   "/inscription",
@@ -44,8 +45,10 @@ router.post(
     }
   }
 );
-router.get("/chose", Authmiddleware, (req, res) => {
-  console.log(req)
+
+router.get("/chose", Authmiddleware,typeCompteAuthorisation([Enumtype.Client]), (req, res) => {
+  console.log(req.auth.type)
+  // console.log(req)
   // async function (req, res) {
   //   try {
   //     console.log(req)
@@ -54,6 +57,7 @@ router.get("/chose", Authmiddleware, (req, res) => {
   //     res.status(500).json("une erreur c'est produit lors de la recupération du token");
   //   }
   // }
+  res.status(200).json("hello")
 });
 
 module.exports = router;
