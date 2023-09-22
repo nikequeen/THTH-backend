@@ -1,5 +1,5 @@
 const UtilisateurService = require("./userService");
-const { utilisateur } = require("../../models/utilisateur");
+const { utilisateur } = require("../../models");
 const Enumtype = require("../utilisateurs/enumtype");
 
 class Admin extends UtilisateurService {

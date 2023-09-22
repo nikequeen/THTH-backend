@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Admin = require("../services/utilisateurs/adminService")
+const Admin = require("../services/utilisateurs/adminService");
 const yupValidator = require("../middleware/validate");
 const { inscriptionDto } = require("../dto/authDto");
 // const { connexionDto } = require("../dto/authDto");

@@ -54,9 +54,10 @@ class UtilisateurService extends queryClass {
         );
 
         if (isValidPassword) {
+         
           const gToken = this.genererJwt(
             existingUtilisateur,
-            "process.env.ACCES_TOKEN_SECRET "
+            "process.env.ACCES_TOKEN_SECRET"
           );
 
           if (gToken) {
