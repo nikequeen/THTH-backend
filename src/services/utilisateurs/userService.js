@@ -4,18 +4,13 @@ const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 // const validateUser = require("../../utils/utils");
 class UtilisateurService extends queryClass {
+  
   genererJwt(utilisateur) {
-    return jsonwebtoken.sign(
-      { utilisateur },
-      "process.env.ACCES_TOKEN_SECRET",
-      { expiresIn: "48h" }
-    );
+    return jsonwebtoken.sign({utilisateur},"process.env.ACCES_TOKEN_SECRET",{ expiresIn: "48h" });
   }
+
   decoderJwt(utilisateur) {
-    return jsonwebtoken.verify(
-      { utilisateur },
-      "process.env.ACCES_TOKEN_SECRET "
-    );
+    return jsonwebtoken.verify(utilisateur,"process.env.ACCES_TOKEN_SECRET");
   }
 
   verifierMotdepasse(motdepasse, hashedmotdepasse) {
@@ -39,6 +34,11 @@ class UtilisateurService extends queryClass {
       return { error: true, error: error };
     }
   }
+  
+  async findUserById(id){
+    return await this.findOne({ id: id });
+  }
+
   async getUnCompte(donneConnexion) {
     const email = donneConnexion.email;
 
@@ -52,13 +52,9 @@ class UtilisateurService extends queryClass {
           donneConnexion.motdepasse,
           existingUtilisateur.motdepasse
         );
-
+        console.log(existingUtilisateur.id)
         if (isValidPassword) {
-         
-          const gToken = this.genererJwt(
-            existingUtilisateur,
-            "process.env.ACCES_TOKEN_SECRET"
-          );
+          const gToken = this.genererJwt(existingUtilisateur);
 
           if (gToken) {
             return {

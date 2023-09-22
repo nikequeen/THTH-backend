@@ -3,17 +3,15 @@ const { utilisateur } = require("../../models");
 const Enumtype = require("../utilisateurs/enumtype");
 
 class Admin extends UtilisateurService {
+
   async createAgent(reqBody) {
-    console.log(reqBody);
-    reqBody.type = Enumtype.Agent;
-    const createAgent = await this.createUnCompte(reqBody);
-    return createAgent;
+    return await this.createUnCompte(reqBody);
   }
+
   async createAdmin(reqBody) {
-    console.log(reqBody);
-    reqBody.type = Enumtype.Admin;
-    const createAdmin = await this.createUnCompte(reqBody);
-    return createAdmin;
+    return await this.createUnCompte(reqBody);
   }
+  
 }
+
 module.exports = new Admin(utilisateur);

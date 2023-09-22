@@ -10,7 +10,7 @@ class Client extends UtilisateurService {
     return createClient;
   }
 async getClient(reqBody){
-   console.log(reqBody)
+  // console.log(reqBody)
   const getClient = await this.getUnCompte(reqBody)
   return getClient
 }

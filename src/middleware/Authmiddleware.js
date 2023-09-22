@@ -1,42 +1,46 @@
 const UtilisateurService = require("../services/utilisateurs/userService");
-const { Utilisateur } = require("../models/utilisateur");
+const { Utilisateur } = require("../models");
 
-const Authmiddleware = (req, res, next) => {
+const userService =  new UtilisateurService(Utilisateur);
+
+exports.Authmiddleware = async (req, res, next) => {
   let authHeader = req.headers.authorization;
-  console.log(authHeader);
 
-  if (!authHeader) {
-    return res.status(401).json({ error: true, message: "Entête introuvable" });
+  if (authHeader == null) {
+    return res.status(401).json({ error: true, message: "entête introuvable" });
   }
-
-  if (
-    authHeader.charAt(0) === '"' &&
-    authHeader.charAt(authHeader.length - 1) === '"'
-  ) {
-    authHeader = authHeader.replace('"', "").trim();
-
-    console.log(authHeader);
+  if (authHeader.charAt(0) === '"' || authHeader.charAt(authHeader.length - 1) === '"') {
+    authHeader = authHeader.replaceAll('"', '').trim();
   }
 
   const token = authHeader.split(" ")[1];
-  console.log(token);
+  // console.log(token);
 
-  const utilisateurService = new UtilisateurService(Utilisateur);
-  
-  const user = utilisateurService.decoderJwt(token);
-  console.log(user.id);
+  let user = userService.decoderJwt(token);
+  user = user.utilisateur
 
-  const trouveUtilisateur = utilisateurService.findOne({ id: user.id });
-  console.log(trouveUtilisateur);
+  const trouveUtilisateur = await userService.findUserById(user.id);
 
-  if (!trouveUtilisateur) {
-    return res
-      .status(401)
-      .json({ error: true, message: "Utilisateur introuvable" });
+  if (trouveUtilisateur == null) {
+    return res.status(401).json({ error: true, message: "utilisateur introuvable" });
   }
 
-  req.user = trouveUtilisateur;
-  next();
+  req.auth = trouveUtilisateur;
+
+  return next();
 };
 
-module.exports = Authmiddleware;
+exports.typeCompteAuthorisation = (types) => (req, res , next) => {
+  
+  const {auth} = req
+  
+  if(!types.includes(auth.type)){
+    return res.status(401).json({
+      error:true, message: 'Vous n\'est pas authorisé à avoir access '
+    })
+  }
+
+  return next()
+}
+
+// module.exports = Authmiddleware;
