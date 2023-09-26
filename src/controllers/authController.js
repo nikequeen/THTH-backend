@@ -46,17 +46,8 @@ router.post(
   }
 );
 
-router.get("/chose", Authmiddleware,typeCompteAuthorisation([Enumtype.Client]), (req, res) => {
+router.get("/chose", Authmiddleware,typeCompteAuthorisation([Enumtype.Admin]), (req, res) => {
   console.log(req.auth.type)
-  // console.log(req)
-  // async function (req, res) {
-  //   try {
-  //     console.log(req)
-  //     const user = await Client.getClient(req.body);
-  //   }catch (error) {
-  //     res.status(500).json("une erreur c'est produit lors de la recupération du token");
-  //   }
-  // }
   res.status(200).json("hello")
 });
 

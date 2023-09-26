@@ -1,28 +1,32 @@
 const UtilisateurService = require("../services/utilisateurs/userService");
 const { Utilisateur } = require("../models");
 
-const userService =  new UtilisateurService(Utilisateur);
-
 exports.Authmiddleware = async (req, res, next) => {
+  const userService = new UtilisateurService(Utilisateur);
   let authHeader = req.headers.authorization;
 
   if (authHeader == null) {
     return res.status(401).json({ error: true, message: "entête introuvable" });
   }
-  if (authHeader.charAt(0) === '"' || authHeader.charAt(authHeader.length - 1) === '"') {
-    authHeader = authHeader.replaceAll('"', '').trim();
+  if (
+    authHeader.charAt(0) === '"' ||
+    authHeader.charAt(authHeader.length - 1) === '"'
+  ) {
+    authHeader = authHeader.replaceAll('"', "").trim();
   }
 
   const token = authHeader.split(" ")[1];
   // console.log(token);
 
   let user = userService.decoderJwt(token);
-  user = user.utilisateur
+  user = user.utilisateur;
 
   const trouveUtilisateur = await userService.findUserById(user.id);
 
   if (trouveUtilisateur == null) {
-    return res.status(401).json({ error: true, message: "utilisateur introuvable" });
+    return res
+      .status(401)
+      .json({ error: true, message: "utilisateur introuvable" });
   }
 
   req.auth = trouveUtilisateur;
@@ -30,17 +34,17 @@ exports.Authmiddleware = async (req, res, next) => {
   return next();
 };
 
-exports.typeCompteAuthorisation = (types) => (req, res , next) => {
-  
-  const {auth} = req
-  
-  if(!types.includes(auth.type)){
+exports.typeCompteAuthorisation = (types) => (req, res, next) => {
+  const { auth } = req;
+
+  if (!types.includes(auth.type)) {
     return res.status(401).json({
-      error:true, message: 'Vous n\'est pas authorisé à avoir access '
-    })
+      error: true,
+      message: "Vous n'est pas authorisé à avoir access ",
+    });
   }
 
-  return next()
-}
+  return next();
+};
 
 // module.exports = Authmiddleware;

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Admin = require("../services/utilisateurs/adminService");
 const yupValidator = require("../middleware/validate");
-const { inscriptionDto,ajoutUtilisateurDto } = require("../dto/authDto");
+const { ajoutUtilisateurDto } = require("../dto/authDto");
 // const { connexionDto } = require("../dto/authDto");
 const Enumtype = require("../services/utilisateurs/enumtype");
 
@@ -33,9 +33,5 @@ router.post("/ajouter-utilisateur", yupValidator(ajoutUtilisateurDto),async func
     }
   }
 );
-<<<<<<< HEAD
-module.exports = router;
-=======
 
 module.exports = router;
->>>>>>> 64b42855397d49b3154cee04b7ace1462cc3e57d
