@@ -30,7 +30,8 @@ class UtilisateurService extends queryClass {
       return decodedToken;
     } catch (error) {
       console.error("Erreur lors du décodage du token JWT :", error);
-      return null;
+      // return null;
+      return { error: true, message: error };
     }
   }
 
@@ -42,6 +43,7 @@ class UtilisateurService extends queryClass {
     const email = donneInscription.email;
     try {
       const existingUtilisateur = await this.findOne({ email: email });
+      console.log("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
       console.log(existingUtilisateur);
 
       if (existingUtilisateur) {

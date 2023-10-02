@@ -19,6 +19,11 @@ exports.Authmiddleware = async (req, res, next) => {
   // console.log(token);
 
   let user = userService.decoderJwt(token);
+  
+  if(user.error){
+    return res.status(401).json({error:true, message : user.message.message})
+  }
+
   user = user.utilisateur;
 
   const trouveUtilisateur = await userService.findUserById(user.id);

@@ -1,7 +1,8 @@
 const UtilisateurService = require("./userService");
-const { utilisateur } = require("../../models");
+const { Utilisateur } = require("../../models");
 
 class Admin extends UtilisateurService {
+  
   async createAgent(reqBody) {
     return await this.createUnCompte(reqBody);
   }
@@ -11,4 +12,4 @@ class Admin extends UtilisateurService {
   }
 }
 
-module.exports = new Admin(utilisateur);
+module.exports = new Admin(Utilisateur);
