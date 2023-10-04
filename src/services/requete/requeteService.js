@@ -33,7 +33,7 @@ class RequeteService extends queryClass {
   }
   async updateRequete(id, nouvellesDonnees) {
     try {
-      const requete = await this.update({ id: id }, nouvellesDonnees);
+      const requete = await this.update(nouvellesDonnees,{ id: id });
       return requete;
     } catch (error) {
       throw new Error(

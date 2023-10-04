@@ -57,7 +57,7 @@ router.put("/updaterequest/:id", async (req, res) => {
       console.log(result);
 
       if (result) {
-        res.status(200).json(result);
+        res.status(200).json({error:false,message:"La requete a été modifié"});
       } else {
         res.status(500).json("Échec de la mise à jour de la requête.");
       }
