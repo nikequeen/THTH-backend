@@ -28,15 +28,19 @@ class RequeteService extends queryClass {
       throw new Error("Failed to get the request" + error.message);
     }
   }
+  async findRequestById(id) {
+    return await this.findOne({ id: id });
+  }
   async updateRequete(id, nouvellesDonnees) {
     try {
-      const requete = await this.update({ _id: id }, nouvellesDonnees);
+      const requete = await this.update({ id: id }, nouvellesDonnees);
       return requete;
     } catch (error) {
-      throw new Error("Échec de la mise à jour de la requête: " + error.message);
+      throw new Error(
+        "Échec de la mise à jour de la requête: " + error.message
+      );
     }
   }
-
 }
 
 module.exports = new RequeteService(Requete);
