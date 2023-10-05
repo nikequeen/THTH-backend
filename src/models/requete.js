@@ -1,5 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Requete extends Model {
     /**
@@ -9,19 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.Requete.hasMany(models.Formulaire)
     }
   }
-  Requete.init(
-    {
-      nom: DataTypes.STRING,
-      description: DataTypes.STRING,
-      prix: DataTypes.INTEGER,
-      status: DataTypes.ENUM("en attente", "en cours", "terminer"),
-    },
-    {
-      sequelize,
-      modelName: "Requete",
-    }
-  );
+  Requete.init({
+    nom: DataTypes.STRING,
+    description: DataTypes.STRING,
+    prix: DataTypes.INTEGER,
+    type: DataTypes.ENUM("Acte de naissnce", "Carte nationnale d'identite", "Passport", "Duplicata de carte")
+  }, {
+    sequelize,
+    modelName: 'Requete',
+  });
   return Requete;
 };

@@ -7,6 +7,7 @@ const {
 } = require("../middleware/Authmiddleware");
 const Enumtype = require("../services/utilisateurs/enumtype");
 const requestController = require("../controllers/requestController");
+const formulaireController = require("../controllers/formulaireController");
 const router = express.Router();
 
 router.use("/authentification", authController);
@@ -17,4 +18,5 @@ router.use(
   adminController
 );
 router.use("/requete", requestController);
+router.use("/formulaire", formulaireController);
 module.exports = router;

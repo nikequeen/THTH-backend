@@ -11,7 +11,11 @@ router.post(
     try {
       const request = await RequeteService.createRequete(req.body);
       if (!request.error) {
-        res.status(201).json(request);
+        res.status(201).json({
+          error: false,
+          message: "La requete a ajoutée avec succes",
+          request: request,
+        });
       } else {
         res.status(400).json(request);
       }
@@ -30,7 +34,7 @@ router.post(
 router.get("/requeteliste", async (req, res) => {
   try {
     const result = await RequeteService.getRequete();
-    res.status(200).json(result);
+    res.status(200).json({error:false, message:"Requête obtenue avec succes", result:result});
   } catch (error) {
     console.log("Erreur lors de la récupération de toutes les requêtes", error);
     res
@@ -38,11 +42,23 @@ router.get("/requeteliste", async (req, res) => {
       .json("Erreur lors de la récupération de toutes les requêtes");
   }
 });
+router.get("/requete/:id", async (req, res) => {
+  try {
+    const requeteId = req.params.id;
+    const result = await RequeteService.getRequeteById(requeteId);
+    res.status(200).json({error:false, message:"Requête obtenue avec succes", result:result});
+  } catch (error) {
+    console.log("Erreur lors de la récupération de la requêtes", error);
+    res
+      .status(404)
+      .json("Erreur lors de la récupération de les requêtes");
+  }
+});
 
 router.put("/updaterequest/:id", async (req, res) => {
   try {
     const requeteId = req.params.id;
-    const { nom, description, prix } = req.body;
+    const { nom, description, prix, type } = req.body;
 
     const existingRequete = await RequeteService.findRequestById(requeteId);
 
@@ -53,11 +69,14 @@ router.put("/updaterequest/:id", async (req, res) => {
         nom,
         description,
         prix,
+        type,
       });
       console.log(result);
 
       if (result) {
-        res.status(200).json({error:false,message:"La requete a été modifié"});
+        res
+          .status(200)
+          .json({ error: false, message: "La requete a été modifié" });
       } else {
         res.status(500).json("Échec de la mise à jour de la requête.");
       }
