@@ -10,6 +10,9 @@ class Admin extends UtilisateurService {
   async createAdmin(reqBody) {
     return await this.createUnCompte(reqBody);
   }
+  async getUtilisateur() {
+    return await this.getUser();
+  }
 }
 
 module.exports = new Admin(Utilisateur);

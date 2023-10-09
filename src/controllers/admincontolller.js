@@ -6,9 +6,11 @@ const { ajoutUtilisateurDto } = require("../dto/authDto");
 // const { connexionDto } = require("../dto/authDto");
 const Enumtype = require("../services/utilisateurs/enumtype");
 
-router.post("/ajouter-utilisateur", yupValidator(ajoutUtilisateurDto),async function (req, res) {
+router.post(
+  "/ajouter-utilisateur",
+  yupValidator(ajoutUtilisateurDto),
+  async function (req, res) {
     try {
-
       let result;
       console.log(req.body);
 
@@ -16,8 +18,8 @@ router.post("/ajouter-utilisateur", yupValidator(ajoutUtilisateurDto),async func
         case Enumtype.Agent:
           result = await Admin.createAgent(req.body);
           break;
-        case Enumtype.Admin :
-          result = await Admin.createAdmin(req.body)
+        case Enumtype.Admin:
+          result = await Admin.createAdmin(req.body);
         default:
           break;
       }
@@ -29,9 +31,22 @@ router.post("/ajouter-utilisateur", yupValidator(ajoutUtilisateurDto),async func
       return res.status(400).json(result);
     } catch (error) {
       console.error("une erreur c'est produit lors de l'inscription", error);
-      res.status(500).json("une erreur c'est produit lors de l'ajout de l'utilisateur");
+      res
+        .status(500)
+        .json("une erreur c'est produit lors de l'ajout de l'utilisateur");
     }
   }
 );
+router.get("/agentliste", async (req, res) => {
+  try {
+    const result = await Admin.getUtilisateur();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("Erreur lors de la récupération de toutes les requêtes", error);
+    res
+      .status(404)
+      .json("Erreur lors de la récupération de toutes les requêtes");
+  }
+});
 
 module.exports = router;

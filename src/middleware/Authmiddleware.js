@@ -1,4 +1,5 @@
 const UtilisateurService = require("../services/utilisateurs/userService");
+
 const { Utilisateur } = require("../models");
 
 exports.Authmiddleware = async (req, res, next) => {
@@ -19,9 +20,9 @@ exports.Authmiddleware = async (req, res, next) => {
   // console.log(token);
 
   let user = userService.decoderJwt(token);
-  
-  if(user.error){
-    return res.status(401).json({error:true, message : user.message.message})
+
+  if (user.error) {
+    return res.status(401).json({ error: true, message: user.message.message });
   }
 
   user = user.utilisateur;

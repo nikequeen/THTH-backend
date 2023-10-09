@@ -43,7 +43,9 @@ class UtilisateurService extends queryClass {
     const email = donneInscription.email;
     try {
       const existingUtilisateur = await this.findOne({ email: email });
-      console.log("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+      console.log(
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      );
       console.log(existingUtilisateur);
 
       if (existingUtilisateur) {
@@ -103,6 +105,15 @@ class UtilisateurService extends queryClass {
         message:
           "Une erreur s'est produite lors de la récupération de l'utilisateur",
       };
+    }
+  }
+  async getUser() {
+    try {
+      requete = await this.findAll({ where: { type: agent } });
+
+      return requete;
+    } catch (error) {
+      throw new Error("Failed to get the request: " + error.message);
     }
   }
 }
