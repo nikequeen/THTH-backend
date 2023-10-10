@@ -37,7 +37,7 @@ router.post(
     }
   }
 );
-router.get("/agentliste", async (req, res) => {
+router.get("/agent-liste", async (req, res) => {
   try {
     const result = await Admin.getUtilisateur();
     res.status(200).json(result);

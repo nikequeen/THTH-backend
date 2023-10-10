@@ -57,36 +57,41 @@ router.get("/requete/:id", async (req, res) => {
   }
 });
 
-router.put("/updaterequest/:id", async (req, res) => {
-  try {
-    const requeteId = req.params.id;
-    const { nom, description, prix, type } = req.body;
+router.put(
+  "/updaterequest/:id",
+  yupValidator(creationrequeteDto),
+  async (req, res) => {
+    try {
+      const requeteId = req.params.id;
+      const { nom, description, prix, type } = req.body;
 
-    const existingRequete = await RequeteService.findRequestById(requeteId);
+      const existingRequete = await RequeteService.findRequestById(requeteId);
 
-    if (!existingRequete) {
-      res.status(404).json("La requête n'a pas été trouvée.");
-    } else {
-      const result = await RequeteService.updateRequete(requeteId, {
-        nom,
-        description,
-        prix,
-        type,
-      });
-
-      if (result) {
-        console.log(result);
-        res
-          .status(200)
-          .json({ error: false, message: "La requete a été modifié" });
+      if (!existingRequete) {
+        res.status(404).json("La requête n'a pas été trouvée.");
       } else {
-        res.status(404).json("Échec de la mise à jour de la requête.");
+        const result = await RequeteService.updateRequete(requeteId, {
+          nom,
+          description,
+          prix,
+          type,
+        });
+
+        if (result) {
+          console.log(result);
+          res.status(200).json({
+            error: false,
+            message: "La requete a été modifié",
+          });
+        } else {
+          res.status(404).json("Échec de la mise à jour de la requête.");
+        }
       }
+    } catch (error) {
+      console.log("Erreur lors de la modification de la requête", error);
+      res.status(500).json("Erreur lors de la modification de la requête");
     }
-  } catch (error) {
-    console.log("Erreur lors de la modification de la requête", error);
-    res.status(500).json("Erreur lors de la modification de la requête");
   }
-});
+);
 
 module.exports = router;

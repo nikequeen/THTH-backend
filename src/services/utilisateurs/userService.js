@@ -4,15 +4,6 @@ const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 // const validateUser = require("../../utils/utils");
 class UtilisateurService extends queryClass {
-  // genererJwt(utilisateur) {
-  //   return jsonwebtoken.sign({utilisateur},"mythth",{ expiresIn: "48h" });
-  // }
-
-  // decoderJwt(gtoken) {
-  //   console.log(gtoken);
-  //   return gtoken;
-  //   //return jsonwebtoken.verify(gtoken,"process.env.ACCES_TOKEN_SECRET");
-  // }
   genererJwt(utilisateur) {
     return jsonwebtoken.sign({ utilisateur }, "mythth", { expiresIn: "48h" });
   }
@@ -107,11 +98,10 @@ class UtilisateurService extends queryClass {
       };
     }
   }
+
   async getUser() {
     try {
-      requete = await this.findAll({ where: { type: agent } });
-
-      return requete;
+      return await this.findAll({ where: { type: "agent" } });
     } catch (error) {
       throw new Error("Failed to get the request: " + error.message);
     }

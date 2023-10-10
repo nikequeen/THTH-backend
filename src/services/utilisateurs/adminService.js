@@ -2,7 +2,6 @@ const UtilisateurService = require("./userService");
 const { Utilisateur } = require("../../models");
 
 class Admin extends UtilisateurService {
-  
   async createAgent(reqBody) {
     return await this.createUnCompte(reqBody);
   }
