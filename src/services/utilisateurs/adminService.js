@@ -12,6 +12,18 @@ class Admin extends UtilisateurService {
   async getUtilisateur() {
     return await this.getUser();
   }
+  async updateAgent(reqBody) {
+    return await this.updateUser(reqBody);
+  }
+  async updateAdmin(reqBody) {
+    return await this.updateUser(reqBody);
+  }
+  async deleteAgent(id) {
+    return await this.deleteUserById(id);
+  }
+  async getUtilisateurById(id) {
+    return await this.getUserById(id);
+  }
 }
 
 module.exports = new Admin(Utilisateur);

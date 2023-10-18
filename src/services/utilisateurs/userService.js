@@ -98,12 +98,53 @@ class UtilisateurService extends queryClass {
       };
     }
   }
+  async getUserById(id) {
+    try {
+      const user = await this.findOne({ id: id });
+
+      if (!user) {
+        throw new Error("Utilisateur introuvable pour l'ID : " + id);
+      }
+
+      return user;
+    } catch (error) {
+      throw new Error(
+        "Échec de la récupération de l'utilisateur : " + error.message
+      );
+    }
+  }
 
   async getUser() {
     try {
       return await this.findAll({ where: { type: "agent" } });
     } catch (error) {
       throw new Error("Failed to get the request: " + error.message);
+    }
+  }
+
+  async updateUser(id, nouvellesDonnees) {
+    try {
+      if (!nouvellesDonnees || typeof nouvellesDonnees !== "object") {
+        throw new Error("Invalid nouvellesDonnees");
+      }
+
+      const user = await this.update(nouvellesDonnees, { id: id });
+      return user;
+    } catch (error) {
+      throw new Error(
+        "Échec de la mise à jour de la requête: " + error.message
+      );
+    }
+  }
+
+  async deleteUserById(id) {
+    try {
+      const result = await this.delete({ id: id });
+      return result;
+    } catch (error) {
+      throw new Error(
+        "Échec de la suppresion de l'utilisateur: " + error.message
+      );
     }
   }
 }

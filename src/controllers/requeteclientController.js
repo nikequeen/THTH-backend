@@ -1,27 +1,37 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/multer");
+const formulaireService = require("../services/formulaire/formulaireService");
 const RequeteClientService = require("../services/requetclient/requeteClientService");
+const clientService = require("../services/utilisateurs/clientService");
 // const Authmiddleware = require("../middleware/Authmiddleware");
-
-
+// const upload = multer({ dest: "uploads/" });
 router.post(
-  "/:utilisateurId/:formulaireId/ajouterunerequete",
+  "/ajouterunerequete/:requeteId",
+  upload.single("file"),
   async (req, res) => {
     try {
-      const utilisateurId = req.params.utilisateurId;
-      console.log(utilisateurId);
-      const formulaireId = req.params.formulaireId;
-      console.log(formulaireId);
-      const clientRequest = await RequeteClientService.createClientRequest(
+      const user = req.auth;
+      const userId = user.id;
+      const requetId = req.params.requeteId;
+      // console.log(userId);
+      // console.log(requetId);
+      const clientRequest = await formulaireService.createForm(
         req.body,
-        utilisateurId,
-        formulaireId
+        req.file,
+        requetId
       );
-      if (!clientRequest.error) {
+      console.log(clientService);
+      const formulaireId = clientRequest.id;
+      const result = await RequeteClientService.createClientRequest(
+        formulaireId,
+        userId
+      );
+      if (!result.error) {
         return res.status(201).json({
           error: false,
-          message: "La requete a été ajouté avec succès",
-          data: clientRequest,
+          message: "La requete a été ajoutée avec succès",
+          data: result,
         });
       } else {
         return res.status(400).json({
@@ -31,12 +41,13 @@ router.post(
       }
     } catch (error) {
       console.error(
-        "Une erreur s'est produite lors de l'ajout de la requete",
+        "Une erreur s'est produite lors de l'ajout de la requête",
         error
       );
-      return res
-        .status(500)
-        .json("Une erreur s'est produite lors de l'ajout du la requet");
+      return res.status(500).json({
+        error: true,
+        message: "Une erreur s'est produite lors de l'ajout de la requête",
+      });
     }
   }
 );
@@ -44,13 +55,12 @@ router.post(
 router.get("/requeteclientliste", async (req, res) => {
   try {
     const user = req.auth;
-    const result = await RequeteClientService.getClientRequestByUserType(
-      user
-    );
+    console.log(user);
+    const result = await RequeteClientService.getClientRequestByUserType(user);
     res.status(200).json({
       error: false,
       message: "Requete client obtenue avec succes",
-      result: result,
+      result: "result",
     });
   } catch (error) {
     console.log("Erreur lors de la récupération de la requete", error);

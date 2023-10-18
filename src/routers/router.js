@@ -8,7 +8,8 @@ const {
 const Enumtype = require("../services/utilisateurs/enumtype");
 const requestController = require("../controllers/requestController");
 const formulaireController = require("../controllers/formulaireController");
-const requeteclientController = require("../controllers/requeteclientController")
+const requeteclientController = require("../controllers/requeteclientController");
+
 const router = express.Router();
 
 router.use("/authentification", authController);
@@ -20,5 +21,5 @@ router.use(
 );
 router.use("/requete", requestController);
 router.use("/formulaire", formulaireController);
-router.use("/requeteclient", requeteclientController)
+router.use("/requeteclient", Authmiddleware, requeteclientController);
 module.exports = router;

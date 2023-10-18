@@ -1,5 +1,7 @@
 const queryClass = require("../../utils/queryClass");
-const { Requeteclient, Formulaire, Requete } = require("../../models");
+const { Requeteclient } = require("../../models");
+const { Formulaire } = require("../../models/formulaire");
+const { Requete } = require("../../models/requete");
 
 class RequeteClientService extends queryClass {
   async createClientRequest(donneCreation, utilisateurId, formulaireId) {
@@ -26,7 +28,7 @@ class RequeteClientService extends queryClass {
           include: [
             {
               model: Formulaire,
-              attributes: ["requeteId"],
+              attributes: ["requestId"],
               include: [
                 {
                   model: Requete,
@@ -38,9 +40,20 @@ class RequeteClientService extends queryClass {
           attributes: ["status", "createdAt"],
         });
       } else if (user.type === "agent") {
-        requete = await this.findAll();
-      } else {
-        throw new Error("Type d'utilisateur non pris en charge");
+        requete = await this.findAll({
+          include: [
+            {
+              model: Formulaire,
+              attributes: ["informationpersonnele", "piecejointe"],
+              include: [
+                {
+                  model: Requete,
+                  attributes: ["nom", "type"],
+                },
+              ],
+            },
+          ],
+        });
       }
 
       return requete;

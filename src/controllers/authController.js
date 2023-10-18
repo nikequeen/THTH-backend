@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Client = require("../services/utilisateurs/clientService");
 const yupValidator = require("../middleware/validate");
-const {Authmiddleware,typeCompteAuthorisation} = require("../middleware/Authmiddleware");
+const {
+  Authmiddleware,
+  typeCompteAuthorisation,
+} = require("../middleware/Authmiddleware");
 const { inscriptionDto } = require("../dto/authDto");
 const { connexionDto } = require("../dto/authDto");
 const Enumtype = require("../services/utilisateurs/enumtype");
@@ -46,9 +49,69 @@ router.post(
   }
 );
 
-router.get("/chose", Authmiddleware,typeCompteAuthorisation([Enumtype.Admin]), (req, res) => {
-  console.log(req.auth.type)
-  res.status(200).json("hello")
+router.get(
+  "/chose",
+  Authmiddleware,
+  typeCompteAuthorisation([Enumtype.Admin]),
+  (req, res) => {
+    console.log(req.auth.type);
+    res.status(200).json("hello");
+  }
+);
+router.get("/client/:id", async (req, res) => {
+  try {
+    const clientId = req.params.id;
+    const result = await Client.getClienById(clientId);
+    res.status(200).json({
+      error: false,
+      message: "Utilisateur obtenue avec succes",
+      result: result,
+    });
+  } catch (error) {
+    console.log("Erreur lors de la récupération de l'utilisateur", error);
+    res.status(404).json("Erreur lors de la récupération de l'utilisateur");
+  }
 });
+router.put(
+  "/updateclient/:id",
+  yupValidator(inscriptionDto),
+  async (req, res) => {
+    try {
+      const clientId = req.params.id;
+      const { nom, email, motdepasse } = req.body;
+
+      const existingUtilisateur = await Client.findUserById(clientId);
+
+      if (!existingUtilisateur) {
+        res
+          .status(404)
+          .json({ error: true, message: "L'utilisateur n'a pas été trouvé." });
+      } else {
+        const result = await Client.updateUser(clientId, {
+          nom,
+          email,
+          motdepasse,
+        });
+
+        if (result) {
+          res
+            .status(200)
+            .json({ error: false, message: "L'utilisateur a été modifié" });
+        } else {
+          res.status(500).json({
+            error: true,
+            message: "Échec de la mise à jour de l'utilisateur.",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Erreur lors de la modification de l'utilisateur", error);
+      res.status(500).json({
+        error: true,
+        message: "Erreur lors de la modification de l'utilisateur",
+      });
+    }
+  }
+);
 
 module.exports = router;

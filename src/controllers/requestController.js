@@ -46,11 +46,7 @@ router.get("/requete/:id", async (req, res) => {
   try {
     const requeteId = req.params.id;
     const result = await RequeteService.getRequeteById(requeteId);
-    res.status(200).json({
-      error: false,
-      message: "Requête obtenue avec succes",
-      result: result,
-    });
+    res.status(200).json(result);
   } catch (error) {
     console.log("Erreur lors de la récupération de la requêtes", error);
     res.status(404).json("Erreur lors de la récupération de les requêtes");

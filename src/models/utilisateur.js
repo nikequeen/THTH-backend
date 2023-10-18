@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Utilisateur.hasMany(models.Requeteclient)
+      models.Utilisateur.hasMany(models.Requeteclient);
     }
   }
   Utilisateur.init(
@@ -27,10 +27,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Utilisateur.beforeCreate(async (utilisateur) => {
-
     if (utilisateur.motdepasse) {
       const hashPassword = await bcrypt.hash(utilisateur.motdepasse, 10);
       utilisateur.motdepasse = hashPassword;
+    }
+  });
+  Utilisateur.beforeUpdate(async (utilisateur) => {
+    if (utilisateur.motdepasse) {
+      const hashNewPassword = await bcrypt.hash(utilisateur.motdepasse, 10);
+      utilisateur.motdepasse = hashNewPassword;
+      console.log(hashNewPassword);
     }
   });
   return Utilisateur;
