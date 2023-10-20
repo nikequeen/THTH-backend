@@ -7,8 +7,8 @@ class FormulaireService extends queryClass {
       donneCreation.requestId = requestId;
       console.log(donneCreation);
       const newForm = await this.create(donneCreation);
-      console.log("Created new record:", newForm);
-      return { error: false, formulaire: newForm };
+      console.log(newForm);
+      return newForm;
     } catch (error) {
       console.error("Error creating the Form:", error);
       return { error: true, errorMessage: error.message };
@@ -30,8 +30,6 @@ class FormulaireService extends queryClass {
       throw new Error("Failed to get the form" + error.message);
     }
   }
-
- 
 }
 
 module.exports = new FormulaireService(Formulaire);

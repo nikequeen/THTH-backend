@@ -6,12 +6,15 @@ const { Requete } = require("../../models/requete");
 class RequeteClientService extends queryClass {
   async createClientRequest(donneCreation, utilisateurId, formulaireId) {
     try {
+      donneCreation = {};
       donneCreation.utilisateurId = utilisateurId;
       donneCreation.formulaireId = formulaireId;
       console.log(donneCreation);
-      const newclientRequest = await this.create(donneCreation);
-      console.log("Created new record:", newclientRequest);
-      return { error: false, formulaire: newclientRequest };
+
+      const newClientRequest = await this.create(donneCreation);
+      console.log("Nouvel enregistrement créé :", newClientRequest);
+
+      return { error: false, demande: newClientRequest };
     } catch (error) {
       console.error("Error creating the client request:", error);
       return { error: true, errorMessage: error.message };

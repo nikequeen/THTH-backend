@@ -1,41 +1,57 @@
 const express = require("express");
+const upload = require("../middleware/multer");
 const router = express.Router();
 const FormulaireService = require("../services/formulaire/formulaireService");
 
-router.post("/:requestId/ajouterunformulaire", async (req, res) => {
-  try {
-    const requestId = req.params.requestId;
-    console.log(requestId);
+router.post(
+  "/ajouterunformulaire/:requestId",
+  upload.single("piecejointe"),
+  async (req, res) => {
+    try {
+      const requestId = req.params.requestId;
+      const fileName = req.file.originalname;
+      console.log(requestId);
+      console.log(fileName);
+      // const fileNameString = JSON.stringify(fileName);
+      const informationpersonnelle = req.body.informationpersonnelle;
+      const informationpersonnelleString = JSON.stringify(
+        informationpersonnelle
+      );
 
-    const form = await FormulaireService.createForm(req.body, requestId);
+      const donneesCreation = {
+        informationpersonnelle: informationpersonnelleString,
+        piecejointe: fileName,
+      };
+      console.log(donneesCreation);
+      const form = await FormulaireService.createForm(
+        donneesCreation,
 
-    if (!form.error) {
-      return res.status(201).json({
-        error: false,
-        message: "Le formulaire a été ajouté avec succès",
-        result: form,
-      });
-    } else {
-      return res.status(400).json({
+        requestId
+      );
+      if (!form.error) {
+        return res.status(201).json(form);
+      } else {
+        return res.status(400).json({
+          error: true,
+          message: "Le formulaire n'a pas été ajouté avec succès",
+        });
+      }
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de l'ajout du formulaire",
+        error
+      );
+      return res.status(500).json({
         error: true,
-        message: "Le formulaire n'a pas été ajouté avec succès",
-        result: form,
+        message: "Une erreur s'est produite lors de l'ajout du formulaire",
       });
     }
-  } catch (error) {
-    console.error(
-      "Une erreur s'est produite lors de l'ajout du formulaire",
-      error
-    );
-    return res
-      .status(500)
-      .json("Une erreur s'est produite lors de l'ajout du formulaire");
   }
-});
+);
 router.get("/formliste", async (req, res) => {
   try {
     const result = await FormulaireService.getForm();
-    console.log(result)
+    console.log(result);
     res.status(200).json({
       error: false,
       message: "Formulaire obtenue avec succes",
@@ -46,6 +62,5 @@ router.get("/formliste", async (req, res) => {
     res.status(404).json("Erreur lors de la récupération du formulaire");
   }
 });
-
 
 module.exports = router;

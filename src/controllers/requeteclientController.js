@@ -3,34 +3,50 @@ const router = express.Router();
 const upload = require("../middleware/multer");
 const formulaireService = require("../services/formulaire/formulaireService");
 const RequeteClientService = require("../services/requetclient/requeteClientService");
-const clientService = require("../services/utilisateurs/clientService");
-// const Authmiddleware = require("../middleware/Authmiddleware");
-// const upload = multer({ dest: "uploads/" });
+const Authmiddleware = require("../middleware/Authmiddleware");
+
 router.post(
   "/ajouterunerequete/:requeteId",
-  upload.single("file"),
+  upload.single("piecejointe"),
   async (req, res) => {
     try {
       const user = req.auth;
-      const userId = user.id;
-      const requetId = req.params.requeteId;
-      // console.log(userId);
-      // console.log(requetId);
-      const clientRequest = await formulaireService.createForm(
-        req.body,
-        req.file,
-        requetId
+      const utilisateurId = user.id;
+      const requeteId = req.params.requeteId;
+      const fileName = req.file.originalname;
+      console.log(requeteId);
+      console.log(fileName);
+      console.log(utilisateurId);
+
+      const informationpersonnelle = req.body.informationpersonnelle;
+      const informationpersonnelleString = JSON.stringify(
+        informationpersonnelle
       );
-      console.log(clientService);
-      const formulaireId = clientRequest.id;
+
+      const donneesCreation = {
+        informationpersonnelle: informationpersonnelleString,
+        piecejointe: fileName,
+      };
+      // console.log(donneesCreation);
+      const form = await formulaireService.createForm(
+        donneesCreation,
+        requeteId
+      );
+      console.log(form);
+
+      const formulaireId = form.dataValues.id;
+
+      console.log(formulaireId);
+
       const result = await RequeteClientService.createClientRequest(
-        formulaireId,
-        userId
+        donneesCreation,
+        utilisateurId,
+        formulaireId
       );
+
       if (!result.error) {
         return res.status(201).json({
-          error: false,
-          message: "La requete a été ajoutée avec succès",
+          message: "La requête a été ajoutée avec succès",
           data: result,
         });
       } else {
