@@ -7,25 +7,23 @@ const Authmiddleware = require("../middleware/Authmiddleware");
 
 router.post(
   "/ajouterunerequete/:requeteId",
-  upload.single("piecejointe"),
+  upload.array("piecejointe", 2),
   async (req, res) => {
     try {
       const user = req.auth;
       const utilisateurId = user.id;
       const requeteId = req.params.requeteId;
-      const fileName = req.file.originalname;
+      const fileNames = req.files.map((file) => file.originalname);
+      console.log(fileNames);
       console.log(requeteId);
-      console.log(fileName);
       console.log(utilisateurId);
 
       const informationpersonnelle = req.body.informationpersonnelle;
-      const informationpersonnelleString = JSON.stringify(
-        informationpersonnelle
-      );
+      const piecejointeString = JSON.stringify(fileNames);
 
       const donneesCreation = {
-        informationpersonnelle: informationpersonnelleString,
-        piecejointe: fileName,
+        informationpersonnelle: informationpersonnelle,
+        piecejointe: piecejointeString,
       };
       // console.log(donneesCreation);
       const form = await formulaireService.createForm(
